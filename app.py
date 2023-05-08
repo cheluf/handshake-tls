@@ -14,7 +14,31 @@ from ipwhois import IPWhois
 import socket
 import requests
 from requests.exceptions import RequestException
+import socket
+import psutil
+from tkinter import messagebox
 
+
+def get_active_interface():
+    active_interface = None
+    max_bytes = 0
+
+    for interface, addrs in psutil.net_if_addrs().items():
+        if interface in ['lo', 'Loopback Pseudo-Interface 1']:
+            continue
+
+        for addr in addrs:
+            if addr.family == socket.AF_INET:
+                stats = psutil.net_io_counters(pernic=True).get(interface)
+
+                if stats:
+                    total_bytes = stats.bytes_sent + stats.bytes_recv
+
+                    if total_bytes > max_bytes:
+                        max_bytes = total_bytes
+                        active_interface = interface
+
+    return active_interface
 
 #Alerte conform pachetelor
 ABUSEIPDB_API_KEY = "ad862e094fb803af7d9b1a14eae2b46dfafe8b94ac45a497c682a1c434ad8e6564a65dce6d5f6910"
@@ -203,7 +227,8 @@ def cipher_suite_human_readable(cipher_suite):
 
 
 # capturarea traficului si sortarea acestuia pentru a primi doar loguri care ne intereseaza.
-capture = pyshark.LiveCapture(interface=r"\Device\NPF_{43BD899A-61EA-46E3-A01C-825B33C43C06}", bpf_filter="tcp port 21 or tcp port 443 or tcp port 990")
+active_interface = get_active_interface()
+capture = pyshark.LiveCapture(interface=active_interface, bpf_filter="tcp port 21 or tcp port 443 or tcp port 990")
 
 def print_live_tls(gui):
     for packet in capture:
@@ -305,10 +330,13 @@ class LiveTLSGUI:
 
         self.button_frame = tk.Frame(master)
         self.button_frame.grid(row=0, column=0, columnspan=3, pady=10)
-
+        
+        self.export_button = tk.Button(self.button_frame, text="Export", command=self.export_logs)
+        self.export_button.pack(side=tk.LEFT, padx=5)
+ 
         self.start_button = tk.Button(self.button_frame, text="Start", command=self.start)
         self.start_button.pack(side=tk.LEFT, padx=5)
-
+ 
         self.stop_button = tk.Button(self.button_frame, text="Stop", command=self.stop, state=tk.DISABLED)
         self.stop_button.pack(side=tk.RIGHT, padx=5)
 
@@ -339,7 +367,15 @@ class LiveTLSGUI:
         self.log_list = []
 
         self.is_running = False
+        self.capture_thread = None
     
+    def export_logs(self):
+      file_name = "exported_logs.txt"
+      with open(file_name, "w") as file:
+        for log_line in self.log_list:
+            file.write(log_line + "\n")
+      messagebox.showinfo("Exported logs", f"Logs have been exported to {file_name}")
+
     def search_ip_info(self):
         search_text = self.ip_search_entry.get().strip()
         ip_info = get_ip_info(search_text)
@@ -374,23 +410,36 @@ class LiveTLSGUI:
         return bool(search_regex.search(log_line))
                 
     def start(self):
-      if not self.is_running:
-        self.is_running = True
-        self.capture_running = True
-        self.start_button.config(state=tk.DISABLED)
-        self.stop_button.config(state=tk.NORMAL)
+        if not self.is_running:
+            self.is_running = True
+            self.capture_running = True
+            self.start_button.config(state=tk.DISABLED)
+            self.stop_button.config(state=tk.NORMAL)
 
-        self.capture_thread = Thread(target=self.run_live_tls)
-        self.capture_thread.start()
+            # Așteptați ca thread-ul de captură să se termine înainte de a porni unul nou
+            if self.capture_thread is not None and self.capture_thread.is_alive():
+                self.capture_thread.join()
 
+            self.capture_thread = Thread(target=self.run_live_tls)
+            self.capture_thread.start()
 
     def stop(self):
-     if self.is_running:
-        self.is_running = False
-        self.capture_running = False
-        self.start_button.config(state=tk.NORMAL)
-        self.stop_button.config(state=tk.DISABLED)
+        if self.is_running:
+            self.is_running = False
+            self.capture_running = False
+            self.start_button.config(state=tk.NORMAL)
+            self.stop_button.config(state=tk.DISABLED)
 
+        
+            if self.capture_thread is not None and self.capture_thread.is_alive():
+                self.master.after(100, self.check_capture_thread)
+
+
+    def check_capture_thread(self):
+     if self.capture_thread is not None and self.capture_thread.is_alive():
+        self.master.after(100, self.check_capture_thread)
+     else:
+        self.capture_thread = None
 
     def run_live_tls(self):
       global print
@@ -426,7 +475,5 @@ if __name__ == "__main__":
     gui.text_box.tag_configure("alert", foreground="red")
     root.protocol("WM_DELETE_WINDOW", gui.on_closing)
     root.mainloop()
-
-
 
 
