@@ -1,0 +1,38 @@
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 104.46.162.226: Unknown error
+2023-05-20 16:26:34, Source IP: 192.168.0.103, Destination IP: 104.46.162.226, Source Port: 64104, Destination Port: 443, TCP Flags: 0x0002 (SYN)
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:34, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0002 (SYN)
+Error checking IP 52.113.194.132: Unknown error
+Error checking IP 192.168.0.103: Unknown error
+2023-05-20 16:26:35, Source IP: 52.113.194.132, Destination IP: 192.168.0.103, Source Port: 443, Destination Port: 64128, TCP Flags: 0x0012 (SYN, ACK)
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:35, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0010 (ACK)
+2023-05-20 16:26:36 ALERT: Weak TLS version detected (TLS 1.0)
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:36, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0018 (PSH, ACK), Content Type: 22 (Handshake), Version: 0x0301 (TLS 1.0), Handshake Type: 1 (Client Hello), Cipher Suite: 0x5a5a (Unknown (0x5a5a)), Server Name (SNI): teams.microsoft.com, Negotiated ALPN: h2
+Error checking IP 52.113.194.132: Unknown error
+Error checking IP 192.168.0.103: Unknown error
+2023-05-20 16:26:36, Source IP: 52.113.194.132, Destination IP: 192.168.0.103, Source Port: 443, Destination Port: 64128, TCP Flags: 0x0010 (ACK)
+Error checking IP 52.113.194.132: Unknown error
+Error checking IP 192.168.0.103: Unknown error
+2023-05-20 16:26:36, Source IP: 52.113.194.132, Destination IP: 192.168.0.103, Source Port: 443, Destination Port: 64128, TCP Flags: 0x0010 (ACK)
+Error checking IP 52.113.194.132: Unknown error
+Error checking IP 192.168.0.103: Unknown error
+2023-05-20 16:26:37, Source IP: 52.113.194.132, Destination IP: 192.168.0.103, Source Port: 443, Destination Port: 64128, TCP Flags: 0x0010 (ACK)
+2023-05-20 16:26:38 ALERT: Long certificate chain detected (3675 certificates)
+Error checking IP 52.113.194.132: Unknown error
+Error checking IP 192.168.0.103: Unknown error
+2023-05-20 16:26:37, Source IP: 52.113.194.132, Destination IP: 192.168.0.103, Source Port: 443, Destination Port: 64128, TCP Flags: 0x0018 (PSH, ACK), Content Type: 22 (Handshake), Version: 0x0303 (TLS 1.2), Handshake Type: 2 (Server Hello), Cipher Suite: 0xc030 (Unknown (0xc030)), Negotiated ALPN: h2
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:38, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0010 (ACK)
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:38, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0018 (PSH, ACK), Content Type: 22 (Handshake), Version: 0x0303 (TLS 1.2), Handshake Type: 16 (Client Key Exchange)
+Error checking IP 192.168.0.103: Unknown error
+Error checking IP 52.113.194.132: Unknown error
+2023-05-20 16:26:39, Source IP: 192.168.0.103, Destination IP: 52.113.194.132, Source Port: 64128, Destination Port: 443, TCP Flags: 0x0018 (PSH, ACK), Content Type: 23 (Application Data), Version: 0x0303 (TLS 1.2)

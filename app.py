@@ -82,6 +82,7 @@ def alert_ftp_data_transfer_unencrypted(packet):
 
 def alert_weak_cipher_suites(cipher_suite):
     weak_cipher_suites = [
+        #'0x1301',   # De test
         '0x0005',  # SSL_RSA_WITH_RC4_128_SHA
         '0xC007',  # TLS_ECDHE_ECDSA_WITH_RC4_128_SHA
         '0xC011',  # TLS_ECDHE_RSA_WITH_RC4_128_SHA
@@ -415,8 +416,6 @@ class LiveTLSGUI:
             self.capture_running = True
             self.start_button.config(state=tk.DISABLED)
             self.stop_button.config(state=tk.NORMAL)
-
-            # Așteptați ca thread-ul de captură să se termine înainte de a porni unul nou
             if self.capture_thread is not None and self.capture_thread.is_alive():
                 self.capture_thread.join()
 
